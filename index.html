@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Date?,,</title>
+    <script src="https://knockoutjs.com/downloads/knockout-3.5.0.js"></script>
+</head>
+<body>
+<style>
+    body
+    {
+        margin: 0;
+    }
+
+    body,
+    body *
+    {
+        box-sizing: border-box;
+    }
+
+    .container
+    {
+        padding: 25px 5px;
+    }
+
+    .tile
+    {
+        width: 100%;
+        height: calc(100vh / 5 - 50px);
+        margin-bottom: 50px;
+        background: red;
+        cursor: pointer;
+    }
+
+    .tile:active
+    {
+        border: solid 3px black;
+    }
+
+    .tile:hover
+    {
+        opacity: 0.7;
+    }
+
+    .tile:last-child
+    {
+        margin-bottom: 0;
+    }
+
+    .finish-box {
+        padding: 50px;
+    }
+
+    .copy-result-area
+    {
+        font-size: 5rem;
+        width: 100%;
+        height: auto;
+    }
+</style>
+
+<div data-bind="if: !isFinished()">
+    <div class="container" data-bind="foreach: currentTileArray()">
+        <div class="tile" tabindex="1" data-bind="
+            style: {
+                background: $data.color,
+            },
+            click: function() {
+                $root.currentIndex($root.currentIndex() + 1)
+                viewModel.resultArray.push({clan: $data.clan})
+            }"></div>
+    </div>
+</div>
+
+<div data-bind="if: isFinished()">
+    <div class="finish-box">
+        <h1>Вы победили!</h1>
+        <textarea class="copy-result-area" rows="1" disabled data-bind="value: clanWinnerBase64"></textarea>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const reduce = Function.bind.call(Function.call, Array.prototype.reduce);
+        const isEnumerable = Function.bind.call(Function.call, Object.prototype.propertyIsEnumerable);
+        const concat = Function.bind.call(Function.call, Array.prototype.concat);
+        const keys = Reflect.ownKeys;
+
+        if (!Object.entries) {
+            Object.entries = function entries(O) {
+                return reduce(keys(O), (e, k) => concat(e, typeof k === 'string' && isEnumerable(O, k) ? [[k, O[k]]] : []), []);
+            };
+        }
+    })();
+    const viewModel = {
+        tilesArray: ko.observableArray([
+            [
+                {clan: '1', color: 'red'},
+                {clan: '2', color: 'wheat'},
+                {clan: '3', color: 'green'},
+                {clan: '4', color: 'blue'},
+                {clan: '5', color: 'yellow'},
+            ],
+            [
+                {clan: '1', color: 'red'},
+                {clan: '3', color: 'green'},
+                {clan: '4', color: 'blue'},
+                {clan: '2', color: 'theat'},
+                {clan: '5', color: 'yellow'},
+            ],
+            [
+                {clan: '2', color: 'theat'},
+                {clan: '3', color: 'green'},
+                {clan: '4', color: 'blue'},
+                {clan: '1', color: 'red'},
+                {clan: '5', color: 'yellow'},
+            ],
+            [
+                {clan: '1', color: 'red'},
+                {clan: '2', color: 'theat'},
+                {clan: '5', color: 'yellow'},
+                {clan: '3', color: 'green'},
+                {clan: '4', color: 'blue'},
+            ],
+            [
+                {clan: '2', color: 'theat'},
+                {clan: '5', color: 'yellow'},
+                {clan: '4', color: 'blue'},
+                {clan: '1', color: 'red'},
+                {clan: '3', color: 'green'},
+            ],
+        ]),
+
+        resultArray: ko.observableArray(),
+        clanWinner: ko.pureComputed(function() {
+            const resultArray = viewModel.resultArray()
+            const resultMap = resultArray.reduce(function(acc, currentResult) {
+                acc[currentResult.clan] = acc[currentResult.clan] ? acc[currentResult.clan] + 1 : 1;
+                return acc
+            }, {})
+            const resultMapArray = Object.entries(resultMap)
+            const winner = resultMapArray.sort(function(clanA, clanB) {
+                return clanA[1] > clanB[1]
+            })[0]
+            return winner[0]
+        }),
+        clanWinnerBase64: ko.pureComputed(function() {
+            const clanWinner = viewModel.clanWinner()
+            return btoa(clanWinner)
+        }),
+
+        currentIndex: ko.observable(0),
+        currentTileArray: ko.pureComputed(function() {
+            return viewModel.tilesArray()[viewModel.currentIndex()]
+        }, this),
+        isFinished: ko.pureComputed(function() {
+            const tilesArrayLength = viewModel.tilesArray()
+            return tilesArrayLength.length <= viewModel.currentIndex()
+        }, this)
+    };
+    // @type KO
+    const vm = ko.applyBindings(viewModel)
+</script>
+
+</body>
+</html>
