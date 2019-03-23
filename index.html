@@ -77,7 +77,7 @@
 
 <div data-bind="if: isFinished()">
     <div class="finish-box">
-        <h1>Вы победили!</h1>
+        <h1>Всё с тобой понятно, товарищ Катя!</h1>
         <textarea class="copy-result-area" rows="1" disabled data-bind="value: clanWinnerBase64"></textarea>
     </div>
 </div>
@@ -98,37 +98,37 @@
     const viewModel = {
         tilesArray: ko.observableArray([
             [
+                {clan: '5', color: 'yellow'},
+                {clan: '3', color: 'green'},
                 {clan: '1', color: 'red'},
                 {clan: '2', color: 'wheat'},
-                {clan: '3', color: 'green'},
                 {clan: '4', color: 'blue'},
-                {clan: '5', color: 'yellow'},
             ],
             [
                 {clan: '1', color: 'red'},
                 {clan: '3', color: 'green'},
+                {clan: '5', color: 'yellow'},
                 {clan: '4', color: 'blue'},
                 {clan: '2', color: 'theat'},
-                {clan: '5', color: 'yellow'},
             ],
             [
                 {clan: '2', color: 'theat'},
+                {clan: '4', color: 'blue'},
                 {clan: '3', color: 'green'},
-                {clan: '4', color: 'blue'},
-                {clan: '1', color: 'red'},
                 {clan: '5', color: 'yellow'},
+                {clan: '1', color: 'red'},
             ],
             [
-                {clan: '1', color: 'red'},
                 {clan: '2', color: 'theat'},
                 {clan: '5', color: 'yellow'},
                 {clan: '3', color: 'green'},
+                {clan: '1', color: 'red'},
                 {clan: '4', color: 'blue'},
             ],
             [
-                {clan: '2', color: 'theat'},
                 {clan: '5', color: 'yellow'},
                 {clan: '4', color: 'blue'},
+                {clan: '2', color: 'theat'},
                 {clan: '1', color: 'red'},
                 {clan: '3', color: 'green'},
             ],
